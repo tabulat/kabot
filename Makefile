@@ -3,8 +3,8 @@
 APP=$(shell basename $(shell git remote get-url origin))
 REGISTRY=tabulat
 VERSION=$(shell git describe --tags --abbrev=0)-$(shell git rev-parse --short HEAD)
-TARGETOS=linux #linux darwin windows
-TARGETARCH=amd64 #arm64
+#TARGETOS=linux #linux darwin windows
+#TARGETARCH=amd64 #arm64dock
 GO_VERSION=1.24.2
 GO_TARGET=go$(GO_VERSION).linux-amd64.tar.gz
 GO_URL=https://go.dev/dl/$(GO_TARGET)
@@ -67,13 +67,13 @@ build.m: format
 
 image:
 	#docker build . -t ${REGISTRY}/${APP}:${VERSION}-${TARGETARCH}
-	#@echo "$$GHCR_TOKEN" | docker login ghcr.io -u tabulat --password-stdin
-	docker buildx build --platform linux/amd64,linux/arm64,darwin/amd64,darwin/arm64,windows/amd64,windows/arm64 . -t ghcr.io/${REGISTRY}/${APP}:${VERSION}-${TARGETARCH}
+	@echo "$$GHCR_TOKEN" | docker login ghcr.io -u tabulat --password-stdin
+	docker buildx build --builder=container-builder --platform linux/amd64,linux/arm64,darwin/amd64,darwin/arm64,windows/amd64,windows/arm64 . -t ghcr.io/${REGISTRY}/${APP}:${VERSION}
 
 push:
 	#docker push ${REGISTRY}/${APP}:${VERSION}-${TARGETARCH}
 	#@echo "$$GHCR_TOKEN" | docker login ghcr.io -u tabulat --password-stdin
-	docker push ghcr.io/${REGISTRY}/${APP}:${VERSION}-${TARGETARCH}
+	docker push ghcr.io/${REGISTRY}/${APP}:${VERSION}
 
 clean:
-	docker rmi ghcr.io/${REGISTRY}/${APP}:${VERSION}-${TARGETARCH}
+	docker rmi ghcr.io/${REGISTRY}/${APP}:${VERSION} || true
