@@ -68,7 +68,7 @@ build.m: format
 image:
 	#docker build . -t ${REGISTRY}/${APP}:${VERSION}-${TARGETARCH}
 	@echo "$$GHCR_TOKEN" | docker login ghcr.io -u tabulat --password-stdin
-	docker buildx build --builder=container-builder --platform linux/amd64,linux/arm64,darwin/amd64,darwin/arm64,windows/amd64,windows/arm64 . -t ghcr.io/${REGISTRY}/${APP}:${VERSION}
+	docker buildx build --builder=container-builder --platform linux/amd64,linux/arm64,darwin/amd64,darwin/arm64,windows/amd64,windows/arm64 . -t ghcr.io/${REGISTRY}/${APP}:${VERSION} --push
 
 push:
 	#docker push ${REGISTRY}/${APP}:${VERSION}-${TARGETARCH}
