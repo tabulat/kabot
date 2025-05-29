@@ -15,6 +15,6 @@ RUN apt-get update && \
 
 WORKDIR /
 COPY --from=builder /go/bin/kbot .
-#COPY --from=debian:latest /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+#COPY --from=ubuntu /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 RUN test -f /etc/ssl/certs/ca-certificates.crt || (echo "❌ TLS not found!" && exit 1)
 ENTRYPOINT ["./kbot", "start"]
